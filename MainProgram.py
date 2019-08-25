@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Spyder Editor
+print ("Hello world")
 
-This is a temporary script file.
-"""
 
-print("Hello world")
-print("test")
