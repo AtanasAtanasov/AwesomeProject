@@ -5,6 +5,9 @@
 # https://developers.google.com/explorer-help/guides/code_samples#python
 
 import os
+import re
+
+import urllib.request
 
 import google_auth_oauthlib.flow
 import googleapiclient.discovery
@@ -15,7 +18,7 @@ scopes = ["https://www.googleapis.com/auth/youtube.force-ssl"]
 def main():
     # Disable OAuthlib's HTTPS verification when running locally.
     # *DO NOT* leave this option enabled in production.
-    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "1"
+    os.environ["OAUTHLIB_INSECURE_TRANSPORT"] = "0"
 
     api_service_name = "youtube"
     api_version = "v3"
@@ -35,11 +38,21 @@ def main():
     )
     response = request.execute()
 
-    videoIds = open("videoIds.txt", "w")
-    videoIds.write(str(response))
-    videoIds.close()
+    videoids = open("videoIds.txt", "w")
+    videoids.write(str(response))
+    videoids.close()
 
     print(response)
+
+    videourls = re.findall("https://i\.ytimg\.com/vi/.........../hqdefault\.jpg", str(response))
+
+    print(videourls)
+
+    counter = 1
+
+    for video in videourls:
+        urllib.request.urlretrieve(video, 'tb/thumbnail' + str(counter) + '.jpg')
+        counter = counter+1
 
 if __name__ == "__main__":
     main()
